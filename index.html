@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Auburn Rockets Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="aurora"></div>
+
+<nav>
+  <div class="logo">🚀 Auburn Rockets</div>
+  <div class="links">
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('calendar')">Calendar</button>
+    <button onclick="showPage('fundraisers')">Fundraisers</button>
+    <button onclick="showPage('sports')">Sports</button>
+    <button onclick="showPage('store')">Store</button>
+    <button onclick="showPage('contact')">Contact</button>
+  </div>
+</nav>
+
+<main>
+  <section id="home" class="page active">
+    <h1>Launch the year in style.</h1>
+    <p>A sleek home for Auburn Rockets events, fundraisers, sports, and merch.</p>
+  </section>
+
+  <section id="calendar" class="page">
+    <h2>📅 Upcoming Events</h2>
+    <div class="card">Winter Pep Rally – Feb 6, 2:15 PM</div>
+    <div class="card">Basketball vs Hudson – Feb 13, 6:30 PM</div>
+  </section>
+
+  <section id="fundraisers" class="page">
+    <h2>🎟 Fundraisers</h2>
+    <div class="card">Panera Community Night – Feb 18</div>
+    <div class="card">Cookie Box Drop – March 5</div>
+  </section>
+
+  <section id="sports" class="page">
+    <h2>🏆 Sports</h2>
+    <div class="card">Indoor Track @ Worcester – Feb 1</div>
+    <div class="card">Basketball vs Hudson – Feb 13</div>
+  </section>
+
+  <section id="store" class="page">
+    <h2>🛍 Rockets Store</h2>
+    <div class="card product">
+      Rockets Luxe Hoodie – $55
+      <button onclick="addToCart()">Add to Cart</button>
+    </div>
+    <div class="card product">
+      Class of '28 Crewneck – $45
+      <button onclick="addToCart()">Add to Cart</button>
+    </div>
+    <p id="cartCount">Cart: 0 items</p>
+  </section>
+
+  <section id="contact" class="page">
+    <h2>📞 Contact</h2>
+    <div class="card">Main Office: (555) 555-5555</div>
+    <div class="card">Email: office@school.org</div>
+  </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
