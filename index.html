@@ -2,70 +2,362 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Auburn Rockets Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Bougie Auburn Rockets school hub for events, fundraisers, sports, contact, and merch."/>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- Parallax Starfield -->
+  <canvas id="stars"></canvas>
 
-<div id="aurora"></div>
+  <!-- Aurora glow layer -->
+  <div id="aurora" aria-hidden="true"></div>
 
-<nav>
-  <div class="logo">🚀 Auburn Rockets</div>
-  <div class="links">
-    <button onclick="showPage('home')">Home</button>
-    <button onclick="showPage('calendar')">Calendar</button>
-    <button onclick="showPage('fundraisers')">Fundraisers</button>
-    <button onclick="showPage('sports')">Sports</button>
-    <button onclick="showPage('store')">Store</button>
-    <button onclick="showPage('contact')">Contact</button>
-  </div>
-</nav>
+  <!-- Top Nav -->
+  <header class="topbar">
+    <button class="brand" onclick="go('home')" aria-label="Go to home">
+      <span class="brandIcon">🚀</span>
+      <span class="brandText">
+        <span class="brandName">Auburn Rockets</span>
+        <span class="brandSub">Bougie Hub</span>
+      </span>
+    </button>
 
-<main>
-  <section id="home" class="page active">
-    <h1>Launch the year in style.</h1>
-    <p>A sleek home for Auburn Rockets events, fundraisers, sports, and merch.</p>
-  </section>
+    <nav class="navLinks" aria-label="Primary">
+      <button class="navBtn" data-page="home" onclick="go('home')">Home</button>
+      <button class="navBtn" data-page="calendar" onclick="go('calendar')">Calendar</button>
+      <button class="navBtn" data-page="fundraisers" onclick="go('fundraisers')">Fundraisers</button>
+      <button class="navBtn" data-page="sports" onclick="go('sports')">Sports</button>
+      <button class="navBtn" data-page="store" onclick="go('store')">Store</button>
+      <button class="navBtn" data-page="contact" onclick="go('contact')">Contact</button>
+    </nav>
 
-  <section id="calendar" class="page">
-    <h2>📅 Upcoming Events</h2>
-    <div class="card">Winter Pep Rally – Feb 6, 2:15 PM</div>
-    <div class="card">Basketball vs Hudson – Feb 13, 6:30 PM</div>
-  </section>
+    <button class="cartBtn" onclick="openCart()" aria-label="Open cart">
+      <span class="cartIcon">🛍</span>
+      <span>Cart</span>
+      <span id="cartBadge" class="cartBadge" hidden>0</span>
+    </button>
+  </header>
 
-  <section id="fundraisers" class="page">
-    <h2>🎟 Fundraisers</h2>
-    <div class="card">Panera Community Night – Feb 18</div>
-    <div class="card">Cookie Box Drop – March 5</div>
-  </section>
+  <!-- App Shell -->
+  <main class="shell">
+    <!-- Slide Pages Wrapper -->
+    <section id="pages" class="pages">
+      <!-- HOME -->
+      <article id="page-home" class="page active" data-page="home">
+        <section class="hero glass">
+          <div class="heroLeft">
+            <div class="pill pillCool">Auburn • Massachusetts • Rockets ✨</div>
+            <h1 class="heroTitle">Launch the year in style.</h1>
+            <p class="heroSub">
+              A sleek home for school events, fundraisers, sports schedules, contact, and a store.
+              Rockets energy, luxury finish.
+            </p>
 
-  <section id="sports" class="page">
-    <h2>🏆 Sports</h2>
-    <div class="card">Indoor Track @ Worcester – Feb 1</div>
-    <div class="card">Basketball vs Hudson – Feb 13</div>
-  </section>
+            <div class="heroActions">
+              <button class="btnPrimary" onclick="go('calendar')">View Calendar →</button>
+              <button class="btnGhost" onclick="go('store')">Shop Rockets Gear</button>
+              <button class="btnGhost" onclick="go('fundraisers')">Support Fundraisers</button>
+            </div>
 
-  <section id="store" class="page">
-    <h2>🛍 Rockets Store</h2>
-    <div class="card product">
-      Rockets Luxe Hoodie – $55
-      <button onclick="addToCart()">Add to Cart</button>
+            <div class="heroGrid">
+              <div class="miniCard reveal">
+                <div class="miniTop">
+                  <span class="pill">Next Up</span>
+                  <span class="miniIcon">📅</span>
+                </div>
+                <div class="miniTitle">Upcoming Events</div>
+                <div class="miniText">Everything scheduled, clean and easy.</div>
+              </div>
+
+              <div class="miniCard reveal">
+                <div class="miniTop">
+                  <span class="pill pillGood">Support</span>
+                  <span class="miniIcon">🎟</span>
+                </div>
+                <div class="miniTitle">Fundraisers</div>
+                <div class="miniText">Every purchase helps the class + clubs.</div>
+              </div>
+
+              <div class="miniCard reveal">
+                <div class="miniTop">
+                  <span class="pill pillWarn">Game Day</span>
+                  <span class="miniIcon">🏆</span>
+                </div>
+                <div class="miniTitle">Sports</div>
+                <div class="miniText">Schedules, matchups, locations.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="heroRight">
+            <!-- Animated Rocket SVG -->
+            <div class="rocketWrap" aria-hidden="true">
+              <svg class="rocket" viewBox="0 0 240 240" role="img">
+                <defs>
+                  <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="rgba(80,220,255,1)"/>
+                    <stop offset="55%" stop-color="rgba(70,140,255,1)"/>
+                    <stop offset="100%" stop-color="rgba(120,255,200,1)"/>
+                  </linearGradient>
+                  <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="6" result="blur"/>
+                    <feColorMatrix in="blur" type="matrix"
+                      values="1 0 0 0 0
+                              0 1 0 0 0
+                              0 0 1 0 0
+                              0 0 0 0.55 0" result="glow"/>
+                    <feMerge>
+                      <feMergeNode in="glow"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                  <radialGradient id="windowG" cx="50%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+                    <stop offset="60%" stop-color="rgba(160,220,255,0.85)"/>
+                    <stop offset="100%" stop-color="rgba(60,120,255,0.55)"/>
+                  </radialGradient>
+                </defs>
+
+                <!-- trail -->
+                <path class="trail" d="M120 196 C 110 210, 95 215, 80 220 C 105 230, 135 230, 160 220 C 145 215, 130 210, 120 196 Z"
+                      fill="url(#rg)" opacity="0.55" filter="url(#softGlow)"/>
+
+                <!-- flame -->
+                <path class="flame" d="M120 186 C 110 196, 110 210, 120 222 C 130 210, 130 196, 120 186 Z"
+                      fill="url(#rg)" filter="url(#softGlow)"/>
+
+                <!-- body -->
+                <path d="M120 30
+                         C 150 55, 165 95, 165 135
+                         C 165 170, 145 195, 120 205
+                         C 95 195, 75 170, 75 135
+                         C 75 95, 90 55, 120 30 Z"
+                      fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.18)" stroke-width="2" filter="url(#softGlow)"/>
+
+                <!-- nose -->
+                <path d="M120 18 C 132 30, 142 44, 150 60 C 135 50, 105 50, 90 60 C 98 44, 108 30, 120 18 Z"
+                      fill="url(#rg)" opacity="0.9" filter="url(#softGlow)"/>
+
+                <!-- window -->
+                <circle cx="120" cy="102" r="18" fill="url(#windowG)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+
+                <!-- fins -->
+                <path d="M75 140 C 55 150, 50 165, 58 182 C 75 175, 83 160, 82 145 Z"
+                      fill="url(#rg)" opacity="0.85"/>
+                <path d="M165 140 C 185 150, 190 165, 182 182 C 165 175, 157 160, 158 145 Z"
+                      fill="url(#rg)" opacity="0.85"/>
+
+                <!-- detail lines -->
+                <path d="M98 70 C 110 62, 130 62, 142 70" stroke="rgba(0,0,0,0.14)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M95 150 C 110 162, 130 162, 145 150" stroke="rgba(0,0,0,0.12)" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </svg>
+
+              <div class="orbitGlow"></div>
+            </div>
+
+            <div class="heroRightNote glass reveal">
+              <div class="pill pillCool">Rockets Theme</div>
+              <div class="noteTitle">Clean. Premium. Fast.</div>
+              <div class="noteText">This site is GitHub Pages friendly, but still feels like an app.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="split reveal">
+          <div class="glass panel">
+            <h3 class="panelTitle">What’s happening soon</h3>
+            <p class="panelSub">A quick preview pulled from your data.</p>
+            <div id="homePreview" class="list"></div>
+            <button class="btnGhost full" onclick="go('calendar')">Open full calendar</button>
+          </div>
+
+          <div class="glass panel">
+            <h3 class="panelTitle">Top merch</h3>
+            <p class="panelSub">A clean store front (demo cart included).</p>
+            <div id="homeMerch" class="grid2"></div>
+            <button class="btnGhost full" onclick="go('store')">Go to store</button>
+          </div>
+        </section>
+      </article>
+
+      <!-- CALENDAR -->
+      <article id="page-calendar" class="page" data-page="calendar">
+        <section class="head glass reveal">
+          <div>
+            <div class="kicker">Calendar</div>
+            <h2 class="h2">Upcoming events</h2>
+            <p class="sub">Real month view + filtering by category.</p>
+          </div>
+
+          <div class="controls">
+            <button class="btnGhost" id="calPrev" aria-label="Previous month">←</button>
+            <div class="pill" id="calLabel">Month</div>
+            <button class="btnGhost" id="calNext" aria-label="Next month">→</button>
+
+            <select id="calFilter" class="select" aria-label="Filter calendar">
+              <option value="All">All</option>
+              <option value="School Event">School Events</option>
+              <option value="Fundraiser">Fundraisers</option>
+              <option value="Sports">Sports</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="glass reveal">
+          <div class="calWeekdays">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div id="calendarGrid" class="calendarGrid"></div>
+        </section>
+
+        <section class="glass reveal">
+          <h3 class="panelTitle">Event details</h3>
+          <p class="panelSub">Click a day with a dot to see what’s scheduled.</p>
+          <div id="calDetails" class="list"></div>
+        </section>
+      </article>
+
+      <!-- FUNDRAISERS -->
+      <article id="page-fundraisers" class="page" data-page="fundraisers">
+        <section class="head glass reveal">
+          <div>
+            <div class="kicker">Fundraisers</div>
+            <h2 class="h2">Support the class</h2>
+            <p class="sub">Clean, transparent, and easy for people to show up.</p>
+          </div>
+          <div class="pill pillGood">Money moves, but classy 💸</div>
+        </section>
+
+        <section id="fundraiserList" class="cards2 reveal"></section>
+      </article>
+
+      <!-- SPORTS -->
+      <article id="page-sports" class="page" data-page="sports">
+        <section class="head glass reveal">
+          <div>
+            <div class="kicker">Sports</div>
+            <h2 class="h2">Schedules</h2>
+            <p class="sub">Matchups, times, and locations. Parents love this.</p>
+          </div>
+          <div class="pill pillWarn">Game Day Mode</div>
+        </section>
+
+        <section id="sportsList" class="cards1 reveal"></section>
+      </article>
+
+      <!-- STORE -->
+      <article id="page-store" class="page" data-page="store">
+        <section class="head glass reveal">
+          <div>
+            <div class="kicker">Store</div>
+            <h2 class="h2">Rockets shop</h2>
+            <p class="sub">Demo cart. You can connect real payments later.</p>
+          </div>
+
+          <div class="controls">
+            <div class="search">
+              <span>🔎</span>
+              <input id="storeSearch" placeholder="Search merch..." />
+            </div>
+            <button class="btnGhost" onclick="openCart()">Open Cart</button>
+          </div>
+        </section>
+
+        <section id="storeGrid" class="productGrid reveal"></section>
+
+        <section class="glass reveal">
+          <h3 class="panelTitle">Payments (GitHub-only options)</h3>
+          <p class="panelSub">
+            When you're ready for real purchases, you can keep GitHub Pages and add:
+            <span class="pill pillCool">Stripe Payment Links</span> or <span class="pill pillCool">Shopify Buy Button</span>.
+          </p>
+        </section>
+      </article>
+
+      <!-- CONTACT -->
+      <article id="page-contact" class="page" data-page="contact">
+        <section class="head glass reveal">
+          <div>
+            <div class="kicker">Contact</div>
+            <h2 class="h2">Reach out</h2>
+            <p class="sub">Questions, ideas, issues. Make it easy for students to be heard.</p>
+          </div>
+          <div class="pill pillCool">Reply-speed: rocket fast</div>
+        </section>
+
+        <section class="split reveal">
+          <div class="glass panel">
+            <h3 class="panelTitle">Main Office</h3>
+            <div class="list">
+              <div class="row">📞 (555) 555-5555</div>
+              <div class="row">✉️ office@school.org</div>
+              <div class="row">📍 Auburn, MA</div>
+            </div>
+          </div>
+
+          <div class="glass panel">
+            <h3 class="panelTitle">Message (demo)</h3>
+            <p class="panelSub">
+              GitHub Pages can’t “send” without a service. Easiest upgrade is linking a Google Form.
+            </p>
+            <div class="form">
+              <input placeholder="Name" />
+              <input placeholder="Email" />
+              <input placeholder="Subject" />
+              <textarea placeholder="Message"></textarea>
+              <button class="btnPrimary full" onclick="toast('Demo only. Link a Google Form or Formspree for real sending.')">
+                Submit
+              </button>
+            </div>
+          </div>
+        </section>
+      </article>
+    </section>
+  </main>
+
+  <!-- Cart Drawer -->
+  <div id="cartOverlay" class="overlay" hidden onclick="closeCart()"></div>
+
+  <aside id="cartDrawer" class="drawer" aria-hidden="true">
+    <div class="drawerTop">
+      <div class="drawerTitle">Cart</div>
+      <button class="iconBtn" onclick="closeCart()" aria-label="Close cart">✕</button>
     </div>
-    <div class="card product">
-      Class of '28 Crewneck – $45
-      <button onclick="addToCart()">Add to Cart</button>
+
+    <div id="cartItems" class="drawerBody"></div>
+
+    <div class="drawerBottom">
+      <div class="totalRow">
+        <span>Subtotal</span>
+        <strong id="cartTotal">$0.00</strong>
+      </div>
+      <button class="btnPrimary full" onclick="toast('Checkout is demo right now. Add Stripe Payment Links when ready.')">
+        Checkout (Demo)
+      </button>
+      <div class="tiny">
+        Want real payments while staying GitHub-only? Use Stripe Payment Links or Shopify Buy Button.
+      </div>
     </div>
-    <p id="cartCount">Cart: 0 items</p>
-  </section>
+  </aside>
 
-  <section id="contact" class="page">
-    <h2>📞 Contact</h2>
-    <div class="card">Main Office: (555) 555-5555</div>
-    <div class="card">Email: office@school.org</div>
-  </section>
-</main>
+  <!-- Toast -->
+  <div id="toast" class="toast" hidden></div>
 
-<script src="script.js"></script>
+  <footer class="footer">
+    <div class="footerInner">
+      <div class="footerLeft">
+        <div class="footerBrand">🚀 Auburn Rockets</div>
+        <div class="tiny">Built on GitHub Pages. Premium feel, zero servers.</div>
+      </div>
+      <div class="footerRight tiny">
+        © <span id="year"></span> Rockets Hub
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
